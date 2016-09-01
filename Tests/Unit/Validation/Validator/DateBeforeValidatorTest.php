@@ -26,6 +26,7 @@ namespace IchHabRecht\ExtTesting\Tests\Unit\Validation\Validator;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use IchHabRecht\ExtTesting\Validation\Validator\DateBeforeValidator;
 use TYPO3\CMS\Core\Tests\UnitTestCase;
 
 /**
@@ -33,4 +34,16 @@ use TYPO3\CMS\Core\Tests\UnitTestCase;
  */
 class DateBeforeValidatorTest extends UnitTestCase
 {
+    /**
+     * @test
+     */
+    public function validateAcceptsDateFromLastYear()
+    {
+        $validator = new DateBeforeValidator();
+        $dateTime = new \DateTime('2015-09-02');
+
+        $result = $validator->validate($dateTime);
+
+        $this->assertEmpty($result->getErrors());
+    }
 }
