@@ -36,12 +36,35 @@ use TYPO3\CMS\Extbase\Validation\Error;
 class DateBeforeValidatorTest extends UnitTestCase
 {
     /**
-     * @test
+     * @return array
      */
-    public function validateAcceptsDateFromLastYear()
+    public function validateAcceptsDateInThePastDataProvider()
     {
-        $validator = new DateBeforeValidator();
-        $dateTime = new \DateTime('2015-09-02');
+        return [
+            'Date in the past without referenceDate' => [
+                [],
+                '2015-09-02',
+            ],
+            'Date in the past with referenceDate' => [
+                [
+                    'referenceDate' => 1472767200,
+                ],
+                '2015-09-02',
+            ],
+        ];
+    }
+
+    /**
+     * @param array $options
+     * @param string $dateTime
+     *
+     * @test
+     * @dataProvider validateAcceptsDateInThePastDataProvider
+     */
+    public function validateAcceptsDateInThePast(array $options, $dateTime)
+    {
+        $validator = new DateBeforeValidator($options);
+        $dateTime = new \DateTime($dateTime);
 
         $result = $validator->validate($dateTime);
 
