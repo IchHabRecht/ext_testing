@@ -45,6 +45,7 @@ class Comment extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * commentdate
      * 
      * @var \DateTime
+     * @validate \IchHabRecht\ExtTesting\Validation\Validator\DateBeforeValidator
      */
     protected $commentdate = null;
     
