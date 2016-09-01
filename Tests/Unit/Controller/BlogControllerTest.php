@@ -26,11 +26,29 @@ namespace IchHabRecht\ExtTesting\Tests\Unit\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use IchHabRecht\ExtTesting\Controller\BlogController;
 use TYPO3\CMS\Core\Tests\UnitTestCase;
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
+use TYPO3\CMS\Fluid\View\TemplateView;
 
 /**
  * Test case for \IchHabRecht\ExtTesting\Controller\BlogController
  */
 class BlogControllerTest extends UnitTestCase
 {
+    /**
+     * @test
+     */
+    public function listActionCallsEnvironmentService()
+    {
+        $environmentServiceMock = $this->getMockBuilder(EnvironmentService::class)->getMock();
+        $environmentServiceMock->expects($this->once())->method('isEnvironmentInBackendMode')->willReturn(true);
+
+        $viewMock = $this->getMockBuilder(TemplateView::class)->disableOriginalConstructor()->getMock();
+
+        $blogController = new BlogController($environmentServiceMock);
+        $this->inject($blogController, 'view', $viewMock);
+
+        $blogController->listAction();
+    }
 }
