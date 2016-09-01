@@ -72,12 +72,45 @@ class DateBeforeValidatorTest extends UnitTestCase
     }
 
     /**
-     * @test
+     * @return array
      */
-    public function validateDeniesDateInTheFuture()
+    public function validateDeniesInvalidDatesDataProvider()
     {
-        $validator = new DateBeforeValidator();
-        $dateTime = new \DateTime(date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y') + 1)));
+        return [
+            'Date one year in the future without referenceDate' => [
+                [],
+                date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y') + 1)),
+            ],
+            'Date one year in the future with referenceDate' => [
+                [
+                    'referenceDate' => 1472767200,
+                ],
+                date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y') + 1)),
+            ],
+            'Now with referenceDate in the past' => [
+                [
+                    'referenceDate' => 1441144800,
+                ],
+                'now',
+            ],
+            'Empty date' => [
+                [],
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * @param array $options
+     * @param string $dateTime
+     *
+     * @test
+     * @dataProvider validateDeniesInvalidDatesDataProvider
+     */
+    public function validateDeniesInvalidDates(array $options, $dateTime)
+    {
+        $validator = new DateBeforeValidator($options);
+        $dateTime = new \DateTime($dateTime);
 
         $result = $validator->validate($dateTime);
 
