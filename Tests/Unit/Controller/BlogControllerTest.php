@@ -41,13 +41,14 @@ class BlogControllerTest extends UnitTestCase
      */
     public function listActionCallsEnvironmentService()
     {
-        $environmentServiceMock = $this->getMockBuilder(EnvironmentService::class)->getMock();
-        $environmentServiceMock->expects($this->once())->method('isEnvironmentInBackendMode')->willReturn(true);
+        $environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
+        $environmentServiceProphecy->isEnvironmentInBackendMode()->willReturn(true);
 
-        $viewMock = $this->getMockBuilder(TemplateView::class)->disableOriginalConstructor()->getMock();
+        $viewProphecy = $this->prophesize(TemplateView::class);
+        $viewProphecy->assign('blogs', [])->shouldBeCalled();
 
-        $blogController = new BlogController($environmentServiceMock);
-        $this->inject($blogController, 'view', $viewMock);
+        $blogController = new BlogController($environmentServiceProphecy->reveal());
+        $this->inject($blogController, 'view', $viewProphecy->reveal());
 
         $blogController->listAction();
     }
