@@ -46,4 +46,17 @@ class DateBeforeValidatorTest extends UnitTestCase
 
         $this->assertEmpty($result->getErrors());
     }
+
+    /**
+     * @test
+     */
+    public function validateDeniesDateInTheFuture()
+    {
+        $validator = new DateBeforeValidator();
+        $dateTime = new \DateTime(date('Y-m-d', mktime(0, 0, 0, date('m'), date('d'), date('Y') + 1)));
+
+        $result = $validator->validate($dateTime);
+
+        $this->assertNotEmpty($result->getErrors());
+    }
 }
