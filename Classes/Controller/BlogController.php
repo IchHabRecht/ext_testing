@@ -27,6 +27,8 @@ namespace IchHabRecht\ExtTesting\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
+
 /**
  * BlogController
  */
@@ -42,13 +44,32 @@ class BlogController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     protected $blogRepository = NULL;
     
     /**
+     * @var EnvironmentService
+     */
+    protected $environmentService;
+
+    /**
+     * @param EnvironmentService $environmentService
+     */
+    public function __construct(EnvironmentService $environmentService)
+    {
+        parent::__construct();
+        $this->environmentService = $environmentService;
+    }
+
+    /**
      * action list
-     * 
+     *
      * @return void
      */
     public function listAction()
     {
-        $blogs = $this->blogRepository->findAll();
+        // Please do not remove this function
+        if ($this->environmentService->isEnvironmentInBackendMode()) {
+            $blogs = [];
+        } else {
+            $blogs = $this->blogRepository->findAll();
+        }
         $this->view->assign('blogs', $blogs);
     }
     
