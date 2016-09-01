@@ -28,6 +28,7 @@ namespace IchHabRecht\ExtTesting\Tests\Unit\Validation\Validator;
 
 use IchHabRecht\ExtTesting\Validation\Validator\DateBeforeValidator;
 use TYPO3\CMS\Core\Tests\UnitTestCase;
+use TYPO3\CMS\Extbase\Validation\Error;
 
 /**
  * Test case for \IchHabRecht\ExtTesting\Validation\Validator\DateBeforeValidator
@@ -58,5 +59,11 @@ class DateBeforeValidatorTest extends UnitTestCase
         $result = $validator->validate($dateTime);
 
         $this->assertNotEmpty($result->getErrors());
+
+        $errorCodes = array_map(function (Error $error) {
+            return $error->getCode();
+        }, $result->getErrors());
+
+        $this->assertContains(1472749225, $errorCodes);
     }
 }
