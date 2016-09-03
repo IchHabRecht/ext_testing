@@ -39,4 +39,14 @@ class BlogRepositoryTest extends FunctionalTestCase
     protected $testExtensionsToLoad = [
             'typo3conf/ext/ext_testing',
     ];
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->importDataSet(ORIGINAL_ROOT . 'typo3/sysext/core/Tests/Functional/Fixtures/pages.xml');
+
+        $fixturePath = ORIGINAL_ROOT . 'typo3conf/ext/ext_testing/Tests/Functional/Fixtures/';
+        $this->importDataSet($fixturePath . 'tx_exttesting_domain_model_blog.xml');
+    }
 }
