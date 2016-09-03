@@ -26,7 +26,13 @@ namespace IchHabRecht\ExtTesting\Tests\Functional\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use IchHabRecht\ExtTesting\Controller\BlogController;
+use IchHabRecht\ExtTesting\Domain\Model\Blog;
+use IchHabRecht\ExtTesting\Domain\Repository\BlogRepository;
 use TYPO3\CMS\Core\Tests\FunctionalTestCase;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 /**
  * Test case for \IchHabRecht\ExtTesting\Controller\BlogController
@@ -39,4 +45,58 @@ class BlogControllerTest extends FunctionalTestCase
     protected $testExtensionsToLoad = [
         'typo3conf/ext/ext_testing',
     ];
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->importDataSet(ORIGINAL_ROOT . 'typo3/sysext/core/Tests/Functional/Fixtures/pages.xml');
+    }
+
+    /**
+     * @test
+     */
+    public function createActionSavesBlogInDatabase()
+    {
+        $blog = new Blog();
+        $blog->setTitle('Functional test blog');
+        $blog->setDescription('This blog was saved by BlogController::createAction');
+
+        $environmentService = new EnvironmentService();
+        $objectManager = new ObjectManager();
+        $blogController = $this->getMockBuilder(BlogController::class)
+            ->setMethods(
+                [
+                    'addFlashMessage',
+                    'redirect',
+                ]
+            )
+            ->setConstructorArgs(
+                [
+                    'environmentService' => $environmentService,
+                ]
+            )
+            ->getMock();
+        $blogController->expects($this->once())
+            ->method('redirect')
+            ->willReturnCallback(
+                [
+                    $objectManager->get(PersistenceManager::class),
+                    'persistAll',
+                ]
+            );
+
+        $blogRepository = $objectManager->get(BlogRepository::class);
+        $this->inject($blogController, 'blogRepository', $blogRepository);
+
+        $blogController->createAction($blog);
+
+        $count = $this->getDatabaseConnection()->exec_SELECTcountRows(
+            '*',
+            'tx_exttesting_domain_model_blog',
+            'title=' . $this->getDatabaseConnection()->fullQuoteStr('Functional test blog', 'tx_exttesting_domain_model_blog')
+        );
+
+        $this->assertSame(1, $count);
+    }
 }
