@@ -26,7 +26,9 @@ namespace IchHabRecht\ExtTesting\Tests\Functional\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use IchHabRecht\ExtTesting\Domain\Repository\BlogRepository;
 use TYPO3\CMS\Core\Tests\FunctionalTestCase;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Test case for \IchHabRecht\ExtTesting\Domain\Repository\BlogRepository
@@ -48,5 +50,20 @@ class BlogRepositoryTest extends FunctionalTestCase
 
         $fixturePath = ORIGINAL_ROOT . 'typo3conf/ext/ext_testing/Tests/Functional/Fixtures/';
         $this->importDataSet($fixturePath . 'tx_exttesting_domain_model_blog.xml');
+    }
+
+    /**
+     * @test
+     */
+    public function findAllByTitlePrefixReturnsBlogsWithPrefix()
+    {
+        $_GET['id'] = 1;
+
+        $objectManager = new ObjectManager();
+        $repository = $objectManager->get(BlogRepository::class);
+
+        $blogs = $repository->findAllByTitlePrefix('Blog');
+
+        $this->assertCount(1, $blogs);
     }
 }
