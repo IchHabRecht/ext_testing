@@ -1,3 +1,13 @@
+2016-09-04         [RELEASE] Release of ext_testing 0.2.0 (Nicole Cordes)
+2016-09-04 a5bd43d [FEATURE] Add .travis.yml (Nicole Cordes)
+2016-09-04 5f3062b [TASK] Add composer.json (Nicole Cordes)
+2016-09-04 23428b8 [FEATURE] Add functional test to test createAction (Nicole Cordes)
+2016-09-03 2eacf3a [TASK] Add BlogRepositoryTest skeleton (Nicole Cordes)
+2016-09-03 36c8186 [FEATURE] Add functional test for fetching blogs by prefix (Nicole Cordes)
+2016-09-03 cc21086 [TASK] Add database fixtures (Nicole Cordes)
+2016-09-03 c44b082 [FEATURE] Add findAllByTitlePrefix function to BlogRepository (Nicole Cordes)
+2016-09-03 b737663 [TASK] Add BlogRepositoryTest skeleton (Nicole Cordes)
+
 2016-09-02 2e480eb [RELEASE] Release of ext_testing 0.1.0 (Nicole Cordes)
 2016-09-01 d59c7ba [FEATURE] Switch mocks to prophecies in BlogController (Nicole Cordes)
 2016-09-01 7af4fd3 [FEATURE] Add test to ensure isEnvironmentInBackendMode call (Nicole Cordes)
