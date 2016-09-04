@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+	<tx_exttesting_domain_model_blog>
+		<uid>1</uid>
+		<pid>1</pid>
+		<title>Unit testing for dummies</title>
+	</tx_exttesting_domain_model_blog>
+	<tx_exttesting_domain_model_blog>
+		<uid>2</uid>
+		<pid>1</pid>
+		<title>Functional testing for dummies</title>
+	</tx_exttesting_domain_model_blog>
+	<tx_exttesting_domain_model_blog>
+		<uid>3</uid>
+		<pid>1</pid>
+		<title>Blog: What about me?</title>
+	</tx_exttesting_domain_model_blog>
+</dataset>

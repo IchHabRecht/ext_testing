@@ -27,6 +27,8 @@ namespace IchHabRecht\ExtTesting\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Database\DatabaseConnection;
+
 /**
  * The repository for Blogs
  */
@@ -39,5 +41,26 @@ class BlogRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     protected $defaultOrderings = array(
         'sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING
     );
+
+    /**
+     * @param string $prefix
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
+    public function findAllByTitlePrefix($prefix)
+    {
+        $query = $this->createQuery();
+
+        return $query->matching(
+            $query->like('title', $this->getDatabaseConnection()->escapeStrForLike($prefix, '') . '%')
+        )->execute();
+    }
+
+    /**
+     * @return DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
+    }
 
 }
